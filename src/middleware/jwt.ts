@@ -2,7 +2,7 @@ import { FastifyInstance } from 'fastify'
 import fastifyJWT from '@fastify/jwt'
 
 
-const JWTMiddleware = (app: FastifyInstance) => {
+const JWTMiddleware = async (app: FastifyInstance) => {
     app.register(fastifyJWT, {
         secret: 'supersecret',
         sign: {
@@ -12,6 +12,10 @@ const JWTMiddleware = (app: FastifyInstance) => {
     
     app.addHook('onRequest', async (request, reply) => {
         if (['/purview/signup'].includes(request.routerPath)) {
+            return
+        }
+        console.log(request.routerPath)
+        if (/^\/docs.*/.test(request.routerPath)) {
             return
         }
         try {

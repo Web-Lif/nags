@@ -19,6 +19,7 @@
   "dependencies": {
     "@fastify/jwt": "^6.3.2",
     "@fastify/sensible": "^5.1.0",
+    "@fastify/swagger": "^7.4.1",
     "@sequelize/core": "^7.0.0-alpha.10",
     "fastify": "^4.3.0",
     "mysql2": "^2.3.3"
