@@ -5,7 +5,15 @@ import middlewares from './middleware/index'
 import services from './service/index'
 
 const app = fastify({
-    logger: true
+    logger: {
+        transport: {
+            target: 'pino-pretty',
+            options: {
+                translateTime: 'HH:MM:ss Z',
+                ignore: 'pid,hostname'
+            }
+        }
+    }
 })
 
 const startApp = async () => {
