@@ -1,0 +1,26 @@
+{
+  "name": "@weblif/nags",
+  "private": "true",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "ts-node-dev --respawn --transpile-only src/app.ts"
+  },
+  "author": {
+    "name": "苯苯",
+    "email": "854363956@qq.com"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^18.6.3",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "@fastify/jwt": "^6.3.2",
+    "@fastify/sensible": "^5.1.0",
+    "@sequelize/core": "^7.0.0-alpha.10",
+    "fastify": "^4.3.0",
+    "mysql2": "^2.3.3"
+  }
+}
