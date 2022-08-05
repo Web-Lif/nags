@@ -1,22 +1,35 @@
 import { FastifyInstance } from 'fastify'
+import { DiscordSnowflake } from '@sapphire/snowflake'
 import { NAGSUserInfo } from './type'
 import NAGSSysUser from '../../models/NAGSSysUser'
 
 interface PurviewSignupParam {
     username: string
     password: string
+    email: string
+    sex?: number
 }
 
 const purviewSignupSchema = {
     schema: {
-        description: '用户登录接口, 通过用户名和密码进行登录',
+        description: '用户注册接口, 用来注册用户帐号信息',
         tags: ['purview'],
-        summary: '用户登录',
+        summary: '用户注册帐号',
         body: {
             type: 'object',
+            required: ['username', 'password', 'email'],
             properties: {
                 username: { type: 'string', description: '帐号' },
-                password: { type: 'string', description: '密码' }
+                password: { type: 'string', description: '密码' },
+                email: { type: 'string', description: '用户邮箱' },
+                sex: { type: 'number', description: '性别 0 表示女生 1 表示男生' },
+            },
+            errorMessage: {
+                required: {
+                    username: '账户名称不能为空',
+                    password: '密码不能为空',
+                    email: '邮箱地址不能为空'
+                }
             }
         },
         response: {
@@ -26,7 +39,7 @@ const purviewSignupSchema = {
                 properties: {
                     data: {
                         type: 'string',
-                        description: 'JWT 生成的令牌信息'
+                        description: '返回令牌, 直接可使用此令牌进行登录'
                     }
                 }
             },
@@ -42,26 +55,23 @@ const initApp = (app: FastifyInstance) => {
         Body: PurviewSignupParam
     }>('/purview/signup', purviewSignupSchema, async (req, reply) => {
         const param = req.body
-        if (!param?.username && !param?.password) {
-            reply.internalServerError('帐号和密码不能为空.')
-            return
-        }
-        const data = await NAGSSysUser.findOne({
-            where: {
-                username: param.username,
-                password: param.password
-            }
-        })
-        if (data === null) {
-            reply.internalServerError('帐号或密码不正确, 请重新检查帐号密码大小写.')
-            return
-        }
+
+        const id = DiscordSnowflake.generate()
+        const user = NAGSSysUser.build({
+            id,
+            nickname: param.username,
+            username: param.username,
+            password: param.password,
+            email: param.email,
+            sex: 0
+        });
+        await user.save()
         const payload: NAGSUserInfo = {
-            id: data.id,
-            nickname: data.nickname,
-            username: data.username,
-            email: data.email,
-            sex: data.sex
+            id: user.id.toString(36),
+            nickname: user.nickname,
+            username: user.username,
+            email: user.email,
+            sex: user.sex
         }
         const token = app.jwt.sign({
             payload,

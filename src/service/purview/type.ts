@@ -1,7 +1,7 @@
 /** 用户信息 */
 export interface NAGSUserInfo {
     /** 唯一用户ID */
-    id: number
+    id: string
     /** 昵称 */
     nickname: string
     /** 用户名 */

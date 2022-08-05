@@ -2,7 +2,7 @@ import { DataTypes, InferAttributes, InferCreationAttributes, Model } from "@seq
 import { getSequelize } from '../utils/sequelize'
 
 class NAGSSysUser extends Model<InferAttributes<NAGSSysUser>, InferCreationAttributes<NAGSSysUser>> {
-    declare id: number
+    declare id: BigInt
     declare nickname: string
     declare username: string
     declare sex: number
@@ -14,8 +14,7 @@ const sequelize = getSequelize()
 
 NAGSSysUser.init({
     id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
+        type: DataTypes.BIGINT,
         primaryKey: true
     },
     nickname: DataTypes.STRING,

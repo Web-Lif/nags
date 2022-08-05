@@ -11,10 +11,9 @@ const JWTMiddleware = async (app: FastifyInstance) => {
     })
     
     app.addHook('onRequest', async (request, reply) => {
-        if (['/purview/signup'].includes(request.routerPath)) {
+        if (['/purview/signin', '/purview/signup'].includes(request.routerPath)) {
             return
         }
-        console.log(request.routerPath)
         if (/^\/docs.*/.test(request.routerPath)) {
             return
         }

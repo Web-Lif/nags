@@ -1,8 +1,10 @@
 import fastify from 'fastify'
 import sensible from '@fastify/sensible'
+import ajvErrors from 'ajv-errors'
 
 import middlewares from './middleware/index'
 import services from './service/index'
+
 
 const app = fastify({
     logger: {
@@ -13,6 +15,12 @@ const app = fastify({
                 ignore: 'pid,hostname'
             }
         }
+    },
+    ajv: {
+        customOptions: {
+            allErrors: true
+        },
+        plugins: [ajvErrors]
     }
 })
 
@@ -28,6 +36,13 @@ const startApp = async () => {
             service(app)
         })
         app.register(sensible)
+        app.setErrorHandler((error, request, reply) => {
+            if (error.validation) {
+                reply.badRequest(error.validation?.[0].message)
+                return
+            } 
+            reply.status(400).send(error)
+          })
         await app.listen({ port: 3000 })
 
     } catch (err) {
