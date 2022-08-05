@@ -41,7 +41,7 @@ const startApp = async () => {
                 reply.badRequest(error.validation?.[0].message)
                 return
             } 
-            reply.status(400).send(error)
+            reply.status(error.statusCode || 400).send(error)
           })
         await app.listen({ port: 3000 })
 
