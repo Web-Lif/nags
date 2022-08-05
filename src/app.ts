@@ -5,9 +5,10 @@ import ajvErrors from 'ajv-errors'
 import middlewares from './middleware/index'
 import services from './service/index'
 
+const isDev = process.env.DEV === 'true'
 
 const app = fastify({
-    logger: {
+    logger: isDev ? {
         transport: {
             target: 'pino-pretty',
             options: {
@@ -15,7 +16,7 @@ const app = fastify({
                 ignore: 'pid,hostname'
             }
         }
-    },
+    } : true,
     ajv: {
         customOptions: {
             allErrors: true

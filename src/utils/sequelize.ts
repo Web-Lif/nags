@@ -1,4 +1,5 @@
 import { Sequelize } from '@sequelize/core'
+import mysql2 from 'mysql2';
 
 let sequelize: Sequelize | null = null
 
@@ -10,6 +11,7 @@ export const getSequelize = (): Sequelize => {
             username: 'root',
             password: 'abcd123456789',
             dialect: 'mysql',
+            dialectModule: mysql2,
             pool: {
                 max: 100,
                 min: 0,

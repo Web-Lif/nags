@@ -8,6 +8,8 @@
 # production
 /es
 /docs-dist
+/dist
+/binary
 
 # ide
 /.vscode
