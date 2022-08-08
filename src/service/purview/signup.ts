@@ -1,5 +1,8 @@
 import { FastifyInstance } from 'fastify'
 import { DiscordSnowflake } from '@sapphire/snowflake'
+import sha512 from 'crypto-js/sha512'
+import Base64 from 'crypto-js/enc-base64'
+
 import { NAGSUserInfo } from './type'
 import NAGSSysUser from '../../models/NAGSSysUser'
 
@@ -57,14 +60,16 @@ const initApp = (app: FastifyInstance) => {
         const param = req.body
 
         const id = DiscordSnowflake.generate()
+        
         const user = NAGSSysUser.build({
             id,
             nickname: param.username,
             username: param.username,
-            password: param.password,
+            password: Base64.stringify(sha512(param.password)),
             email: param.email,
             sex: 0
         });
+
         await user.save()
         const payload: NAGSUserInfo = {
             id: user.id.toString(36),

@@ -1,4 +1,7 @@
 import { FastifyInstance } from 'fastify'
+import sha512 from 'crypto-js/sha512'
+import Base64 from 'crypto-js/enc-base64'
+
 import { NAGSUserInfo } from './type'
 import NAGSSysUser from '../../models/NAGSSysUser'
 
@@ -55,7 +58,7 @@ const initApp = (app: FastifyInstance) => {
         const data = await NAGSSysUser.findOne({
             where: {
                 username: param.username,
-                password: param.password
+                password: Base64.stringify(sha512(param.password))
             }
         })
         if (data === null) {
