@@ -33,9 +33,14 @@ const startApp = async () => {
         })
         await Promise.all(promises)
 
-        services.forEach(service => {
-            service(app)
-        })
+        
+        app.register((prefixApp, _, done) => {
+            services.forEach(service => {
+                service(prefixApp)
+            })
+            done()
+        }, { prefix: '/api' })
+
         app.register(sensible)
         app.setErrorHandler((error, request, reply) => {
             if (error.validation) {

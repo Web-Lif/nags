@@ -6,17 +6,24 @@ const JWTMiddleware = async (app: FastifyInstance) => {
     app.register(fastifyJWT, {
         secret: 'supersecret',
         sign: {
-            expiresIn: '1m'
+            expiresIn: '10s'
         }
     })
     
     app.addHook('onRequest', async (request, reply) => {
-        if (['/purview/signin', '/purview/signup'].includes(request.routerPath)) {
+        if ([
+            '/api/purview/signin',
+            '/api/purview/signup'
+        ].includes(request.routerPath)) {
             return
         }
-        if (/^\/docs.*/.test(request.routerPath)) {
-            return
+
+        if (process.env.DEV === 'true') {
+            if (/^\/docs.*/.test(request.routerPath)) {
+                return
+            }
         }
+
         try {
             await request.jwtVerify()
         } catch (err) {
