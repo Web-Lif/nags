@@ -34,7 +34,7 @@
     "ajv-errors": "^3.0.0",
     "crypto-js": "^4.1.1",
     "fastify": "^4.3.0",
-    "mysql2": "^2.3.3"
+    "mysql2": "^3.0.0"
   },
   "pkg": {
     "scripts": "dist/**/*.js",
